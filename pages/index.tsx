@@ -1,3 +1,4 @@
+import { initializeApollo } from "../src/apollo";
 import { gql, useQuery } from "@apollo/client";
 
 const GET_COUNTRIES = gql`
@@ -24,3 +25,17 @@ const Home = () => {
 };
 
 export default Home;
+
+export async function getStaticProps() {
+  const apolloClient = initializeApollo();
+
+  await apolloClient.query({
+    query: GET_COUNTRIES,
+  });
+
+  return {
+    props: {
+      initialApolloState: apolloClient.cache.extract(),
+    },
+  };
+}
